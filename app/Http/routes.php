@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function() {
-    return view('welcome');
-});
+Route::get('/', 'WelcomeController@index');
 
 //Route::get('signup', function() {
 //    return 'hello';
@@ -26,6 +24,8 @@ Route::post('signup', 'Auth\AuthController@postRegister')->name('signup.post');
 // ログイン認証
 Route::get('login' , 'Auth\AuthController@getLogin')->name('login.get');
 Route::post('login', 'Auth\AuthController@postLogin')->name('login.post');
-ROute::get('logout', 'Auth\AuthController@getLogout')->name('logout.get');
+Route::get('logout', 'Auth\AuthController@getLogout')->name('logout.get');
 
-Route::resource('tasks', 'TasksController');
+Route::group(['middleware' => 'auth'], function() {
+    Route::resource('tasks', 'TasksController', ['only' => ['show','create','store', 'destroy', 'edit']]);  
+});

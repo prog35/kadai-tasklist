@@ -16,15 +16,17 @@ class TasksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    /*
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = Task::paginate(10);
         
         return view('tasks.index', [
             'tasks' => $tasks,
         ]);
     }
-
+    */
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -52,10 +54,10 @@ class TasksController extends Controller
             'content' => 'required|max:255',
         ]);
         
-        $task = new Task;
-        $task->status = $request->status;
-        $task->content = $request->content;
-        $task->save();
+        $request->user()->tasks()->create([
+            'content'   => $request->content,
+            'status'    => $request->status,
+        ]);
         
         return redirect('/');
     }
